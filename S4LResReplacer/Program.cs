@@ -38,28 +38,17 @@ namespace S4LResReplacer
         private static void ApplyCustomizations()
         {
             if (!Directory.Exists(CustomDir))
-            {
-                Console.WriteLine("No 'Custom' folder found. Nothing to apply.");
                 return;
-            }
+
             if (!File.Exists(ResourceFile))
-            {
-                Console.WriteLine($"ERROR: {ResourceFile} not found.");
                 return;
-            }
 
             if (!File.Exists(BackupFile))
-            {
                 File.Copy(ResourceFile, BackupFile);
-                Console.WriteLine("Backed up original resource.s4hd");
-            }
 
             _zipFile = S4Zip.OpenZip(ResourceFile);
             if (_zipFile == null)
-            {
-                Console.WriteLine("ERROR: could not open resource.s4hd as S4Zip.");
                 return;
-            }
 
             var entryMap = _zipFile.Values
                                    .ToDictionary(e => e.FullName,
@@ -101,11 +90,6 @@ namespace S4LResReplacer
             }
 
             _zipFile.Save();
-
-            Console.WriteLine(
-                $"Done. Processed {files.Length} custom files: " +
-                $"{skipped} skipped, {replaced} replaced, {added} added."
-            );
         }
 
         private static void RevertResourceFile()
@@ -115,10 +99,8 @@ namespace S4LResReplacer
                 if (File.Exists(ResourceFile))
                     File.Delete(ResourceFile);
                 File.Move(BackupFile, ResourceFile);
-                Console.WriteLine("resource.s4hd restored from backup.");
 
             }
-            else Console.WriteLine("No backup found to restore.");
         }
 
         private static void CleanupUnusedResources()
@@ -126,11 +108,7 @@ namespace S4LResReplacer
             var _zipFile2 = S4Zip.OpenZip(ResourceFile);
             string resourceDir = _zipFile2.ResourcePath;
             if (!Directory.Exists(CacheDir))
-            {
-                Console.WriteLine("No _resources folder found — nothing to clean.");
-                Console.ReadKey();
                 return;
-            }
 
             var usedChecksums = new HashSet<string>(
                             _zipFile2.Values.Select(ent => ent.Checksum.ToString("x")),
@@ -150,25 +128,18 @@ namespace S4LResReplacer
             else
             {
                 foreach (var file in unused)
-                {
                     File.Delete(file);
-                    Console.WriteLine($"Deleted unused resource: {file}");
-                }
             }
         }
 
         private static void WaitForClientExit()
         {
-            Console.WriteLine("Waiting for S4Client to start...");
-            // first wait until it shows up
             Process[] procs;
             while ((procs = Process.GetProcessesByName("S4Client")).Length == 0)
             {
                 Thread.Sleep(2000);
             }
 
-            Console.WriteLine($"S4Client started (PID {procs[0].Id}), now waiting for exit...");
-            // now wait for each instance to exit
             foreach (var p in procs)
             {
                 try
@@ -177,7 +148,6 @@ namespace S4LResReplacer
                 }
                 catch { /* might have exited already */ }
             }
-            Console.WriteLine("S4Client has exited, proceeding to cleanup.");
         }
     }
 }
