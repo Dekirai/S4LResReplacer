@@ -6,8 +6,8 @@ An S4L Resource Tool that reads and writes raw files from a folder
 * Automatically cleans up the resources again after S4Client is closed to keep it's original state
 
 # Usage
-1. Download `S4LResReplacer.exe` from releases
-2. Place it in the root directory of S4 League
+1. Download `S4LResReplacer.zip` from releases
+2. Extract it in the root directory of S4 League
 3. Create .bat files, name them anything you want, preferable "res_write.bat" and "res_clean.bat" or similar
 4. For write, enter `S4LResReplacer.exe --enable-custom`
 5. For clean, enter `S4LResReplacer.exe --clean-only`
