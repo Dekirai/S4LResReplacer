@@ -18,7 +18,11 @@ An S4L Resource Tool that reads and writes raw files from a folder
 
 You can bind the `S4LResReplacer` to a launcher as well and make it autorun when starting S4 and clean up again when S4 is closed (--clean-only auto-checks if s4 is closed or not).  
 This allows you to always place any file you want inside `Custom` to be added/replaced and immediately clean up your game again to it's original state when exiting.  
-It can be extremely powerful because you no longer have to overwrite the files again with a Resource Tool!
+It can be extremely powerful because you no longer have to overwrite the files again with a Resource Tool!    
+
+Here is a video showcasing how ResReplacer works:  
+
+[![Video](https://img.youtube.com/vi/LKlhf-vbCb4/0.jpg)](https://www.youtube.com/watch?v=LKlhf-vbCb4&ab_channel=Dekirai)
 
 ## Example for adding it to a launcher
 ```csharp
