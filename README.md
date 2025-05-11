@@ -20,6 +20,69 @@ You can bind the `S4LResReplacer` to a launcher as well and make it autorun when
 This allows you to always place any file you want inside `Custom` to be added/replaced and immediately clean up your game again to it's original state when exiting.  
 It can be extremely powerful because you no longer have to overwrite the files again with a Resource Tool!
 
+## Example for adding it to a launcher
+```csharp
+private async void bt_StartGame_Click(object sender, RoutedEventArgs e)
+{
+    bt_StartGame.IsEnabled = false;
+    if (chbk_CustomResources.IsChecked == true)
+    {
+        try
+        {
+            string baseDir = AppContext.BaseDirectory;
+
+            string exePath = Path.Combine(baseDir, "S4LResReplacer.exe");
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = exePath,
+                WorkingDirectory = baseDir,
+                Arguments = "--enable-custom",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
+            };
+
+            using var proc = Process.Start(psi);
+            if (proc != null)
+            {
+                await proc.WaitForExitAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            //Nothing
+        }
+    }
+    await Task.Run(() => LoginClient.Connect(Constants.ConnectEndPoint));
+    Properties.Settings.Default.username = tb_Username.Text;
+    Properties.Settings.Default.password = tb_Password.Password;
+    Properties.Settings.Default.Save();
+
+    try
+    {
+        string baseDir = AppContext.BaseDirectory;
+
+        string exePath = Path.Combine(baseDir, "S4LResReplacer.exe");
+
+        var psi = new ProcessStartInfo
+        {
+            FileName = exePath,
+            WorkingDirectory = baseDir,
+            Arguments = "--clean-only",
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            WindowStyle = ProcessWindowStyle.Hidden
+        };
+        Process.Start(psi);
+    }
+    catch (Exception ex)
+    {
+        //Nothing
+    }
+}
+```
+
 # Libraries
 - [S4Zip](https://github.com/wtfblub/NetspherePirates/blob/dev/src/Netsphere.Resource/S4Zip.cs)
 - [BlubLib](https://gitlab.com/wtfblub/BlubLib/-/tree/dev/src/BlubLib)
