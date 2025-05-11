@@ -28,8 +28,7 @@ namespace S4LResReplacer
 
             if (args.Any(a => a.Equals(CleanOnlyArg, StringComparison.OrdinalIgnoreCase)))
             {
-                Thread.Sleep(10000); //Make sure S4Client is open
-                WaitForClientExit();
+                WaitForClientExit(maxWaitMilliseconds: 10000);
                 RevertResourceFile();
                 CleanupUnusedResources();
             }
@@ -80,11 +79,13 @@ namespace S4LResReplacer
                         }
                     }
                     existing.SetData(newData);
+                    Console.WriteLine($"Replaced {rel}");
                     replaced++;
                 }
                 else
                 {
                     _zipFile.CreateEntry(rel, newData);
+                    Console.WriteLine($"Added {rel}");
                     added++;
                 }
             }
@@ -128,16 +129,25 @@ namespace S4LResReplacer
             else
             {
                 foreach (var file in unused)
+                {
                     File.Delete(file);
+                    Console.WriteLine($"Deleted unused resource: {file}");
+                }
             }
         }
 
-        private static void WaitForClientExit()
+        private static void WaitForClientExit(int maxWaitMilliseconds = 10_000)
         {
+            var sw = Stopwatch.StartNew();
             Process[] procs;
+
             while ((procs = Process.GetProcessesByName("S4Client")).Length == 0)
             {
-                Thread.Sleep(2000);
+                if (sw.ElapsedMilliseconds >= maxWaitMilliseconds)
+                {
+                    return;
+                }
+                Thread.Sleep(500);
             }
 
             foreach (var p in procs)
@@ -146,7 +156,10 @@ namespace S4LResReplacer
                 {
                     p.WaitForExit();
                 }
-                catch { /* might have exited already */ }
+                catch
+                {
+                    // in case it already exited or we lack permissions
+                }
             }
         }
     }
