@@ -1,6 +1,9 @@
 # S4LResReplacer
 An S4L Resource Tool that reads and writes raw files from a folder
 
+> [!NOTE]
+> This program does not work with Valofe's S4 League
+
 # Features
 * Write any changed or new file to resource.s4hd
 * Automatically cleans up the resources again after S4Client is closed to keep it's original state
