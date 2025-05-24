@@ -75,3 +75,9 @@ private async void bt_StartGame_Click(object sender, RoutedEventArgs e)
 
 * [S4Zip](https://github.com/wtfblub/NetspherePirates/blob/dev/src/Netsphere.Resource/S4Zip.cs)
 * [BlubLib](https://gitlab.com/wtfblub/BlubLib/-/tree/dev/src/BlubLib)
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
